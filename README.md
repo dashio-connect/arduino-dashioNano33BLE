@@ -32,3 +32,7 @@ For previous releases, please refer to <a href="https://github.com/dashio-connec
 ### 1.2.1 (1 October 2024)
 
 - Updated library properties
+
+### 1.2.2 (12 January 2025)
+
+- Fix BLE incoming message errors associated with some Android phones/tablets.

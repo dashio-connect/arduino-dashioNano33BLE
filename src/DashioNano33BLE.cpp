@@ -52,6 +52,7 @@ void DashioBLE::onReadValueUpdate(BLEDevice central, BLECharacteristic character
     characteristic.readValue(value, dataLength);
     value[dataLength] = '\0';  // make sure to null-terminate!
     messageData.processMessage(value);
+    messageData.checkBuffer();
     delete[] value;
 }
 
