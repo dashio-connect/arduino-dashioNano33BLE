@@ -117,29 +117,34 @@ void DashioBLE::sendMessage(const String& message) {
 }
 
 void DashioBLE::processConfig() {
-    sendMessage(dashioDevice->getC64ConfigBaseMessage());
-    
-    int c64Length = strlen_P(dashioDevice->configC64Str);
-    int length = 0;
-    String message = "";
-    for (int k = 0; k < c64Length; k++) {
-        char myChar = pgm_read_byte_near(dashioDevice->configC64Str + k);
-        
-        message += myChar;
-        length++;
-        if (length == 100) {
+    int c64Length = 0;
+    if ((dashioDevice->cfgRevision > 0) && (dashioDevice->configC64Str != nullptr)) {
+        sendMessage(dashioDevice->getC64ConfigBaseMessage());
+
+        c64Length = strlen_P(dashioDevice->configC64Str);
+        int length = 0;
+        String message = "";
+        for (int k = 0; k < c64Length; k++) {
+            char myChar = pgm_read_byte_near(dashioDevice->configC64Str + k);
+            
+            message += myChar;
+            length++;
+            if (length == 100) {
+                sendMessage(message);
+                delay(200); // or BLE peripheral can't handle it
+                message = "";
+                length = 0;
+            }
+        }
+        if (message.length() > 0) {
             sendMessage(message);
             delay(200); // or BLE peripheral can't handle it
-            message = "";
-            length = 0;
         }
-    }
-    if (message.length() > 0) {
-        sendMessage(message);
-        delay(200); // or BLE peripheral can't handle it
-    }
 
-    sendMessage(String('\n'));
+        sendMessage(String('\n'));
+    } else {
+        sendMessage(dashioDevice->getConfigNAmessage());
+    }
 }
 
 void DashioBLE::run() {

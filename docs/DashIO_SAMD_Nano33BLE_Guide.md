@@ -1,8 +1,8 @@
 <h1 id="toc_0">Dash IoT Guide (Arduino Nano 33 BLE)</h1>
 
-**12 February 2025**
+**31 October 2026**
 
-This guide demonstrates how to make a BLE connection to an Arduino Nano 33 BLE using the Arduino or PlatformIO IDE and the **DashIO** Adruino library. It also shows how to load user controls (widgets) into your mobile device to monitor and control an IoT device.
+This guide demonstrates how to make a BLE connection to an Arduino Nano 33 BLE using the Arduino or PlatformIO IDE and the **DashIO** Arduino library. It also shows how to load user controls (widgets) into your mobile device to monitor and control an IoT device.
 
 <h2 id="toc_1">Getting Started</h2>
 
@@ -22,15 +22,15 @@ You will need to install the <strong>Dash IoT</strong> app on your mobile phone 
 
 You will need to add the **DashioNano33BLE** library into your project.  It is included in the Arduino IDE Library manager. Search the library manager for the library titled "DashioNano33BLE" and install. The Arduino IDE may also ask you to install the following libraries (dependencies). Please make sure they are all installed from the Arduino IDE Library Manager.
 
-- **Dashio** is the core messageing library used to manage messages.
+- **Dashio** (version 1.2.5 or later) is the core messaging library used to manage messages.
 - **ArduinoBLE** is required for BLE messaging.
 
 <h3 id="toc_5">PlatformIO</h3>
 
 Using **Dash** with the **PlatformIO** IDE is easy.
 
-1. Install the **Dash** library into your project. The easiest way to do this is to download the <a href="https://github.com/dashio-connect/arduino-dashio">**arduino-dashio**</a> library  into the ***lib*** directory of your project.
-2. Install the libraries listed above using the PlatformIO **Libraries** manager.
+1. Install the **DashioNano33BLE** library into your project. The easiest way to do this is to download the <a href="https://github.com/dashio-connect/arduino-dashioNano33BLE">**arduino-dashioNano33BLE**</a> library into the ***lib*** directory of your project.
+2. Install the **Dashio** and **ArduinoBLE** libraries listed above using the PlatformIO **Libraries** manager.
 3. Edit the ***platformio.ini*** file for you project by adding ```lib_ldf_mode = deep``` to enable all the required files to be found and also add ```monitor_speed = 115200``` to set the required serial monitor speed.
 
 Your finished ***platformio.ini*** file should look something like this:
@@ -41,7 +41,7 @@ platform = nordicnrf52
 board = nano33ble
 framework = arduino
 lib_deps = 
-	arduino-libraries/ArduinoBLE@^1.3.2
+	arduino-libraries/ArduinoBLE@^2.1.0
 lib_ldf_mode = deep
 monitor_speed = 115200
 ```
@@ -71,7 +71,7 @@ void loop() {
 }
 ```
 
-This is about the fewest number of lines of code necessary to get talking to the <strong>Dash</strong> app. There is a lot happening under the hood to make this work. After the <code>#include &quot;DashioSAMD_NINA.h&quot;</code> we create a device with the <em>device_type</em> as its only attribute. We also create a BLE connection, with the newly created device being an attribute to the connection. The second attribute of the BLE connection enables the received and transmitted messages to be printed to the serial monitor to make debugging easier.
+This is about the fewest number of lines of code necessary to get talking to the <strong>Dash</strong> app. There is a lot happening under the hood to make this work. After the <code>#include &quot;DashioNano33BLE.h&quot;</code> we create a device with the <em>device_type</em> as its only attribute. We also create a BLE connection, with the newly created device being an attribute to the connection. The second attribute of the BLE connection enables the received and transmitted messages to be printed to the serial monitor to make debugging easier.
 
 In the <code>setup()</code> function we start the BLE connection <code>ble_conn.begin()</code>. For BLE connections we start the connection before <code>dashDevice.setup</code>. This is to make sure we get a sensible value for the mac address, which is then supplied to the device as a unique <em>device_ID</em>.
 
@@ -90,7 +90,7 @@ Lets add Dial control messages that are sent to the <strong>Dash</strong> app ev
 #include "DashioNano33BLE.h"
 #include <arduino-timer.h>
 
-DashDevice dashDevice("SAMD_NINA_Type");
+DashDevice dashDevice("Nano33BLE_Type");
 DashBLE    ble_con(&dashDevice, true);
 
 auto timer = timer_create_default();
@@ -129,7 +129,7 @@ Once again, run the above code and the <strong>Dash</strong> app. This time, a n
 
 The next step is to show the Dial values from the messages on a control on the <strong>Dash</strong> app.
 
-In the <strong>Dash</strong> app, tap the <img src="https://dashio.io/wp-content/uploads/2021/07/iot_blue_44.png" width="20"> <strong>All Devices</strong> button, followed by the <img src="https://dashio.io/wp-content/uploads/2021/07/magnifying_glass_44_blue.png" width="20"> <strong>Find New Device</strong> button. Then select the <strong>BLE Scan</strong> option to show a list of new IoT devices that are BLE enabled. Your IoT device shpuld be shown in the list. Select your device and from the next menu select <strong>Create Device View</strong>. This will create an empty Device View for your new IoT deivce. You can now add controls to the Device View:
+In the <strong>Dash</strong> app, tap the <img src="https://dashio.io/wp-content/uploads/2026/07/iot_many_blue_44.png" width="20"> <strong>All Devices</strong> button, followed by the <img src="https://dashio.io/wp-content/uploads/2021/07/magnifying_glass_44_blue.png" width="20"> <strong>Find New Device</strong> button. Then select the <strong>BLE Scan</strong> option to show a list of new IoT devices that are BLE enabled. Your IoT device should be shown in the list. Select your device and from the next popup menu choose to <strong>Create Device View</strong>. This will create an empty Device View for your new IoT device. You can now add controls to the Device View:
 
 <h3 id="toc_8">Adding Controls to Dash App</h3>
 
@@ -153,7 +153,7 @@ Continuing with the example, in the Arduino code we need to respond to messages 
 ```
 #include "DashioNano33BLE.h"
 
-DashDevice dashDevice("SAMD_NINA_Type");
+DashDevice dashDevice("Nano33BLE_Type");
 DashBLE    ble_con(&dashDevice, true);
 
 int dialValue = 0;
@@ -193,7 +193,7 @@ void loop() {
 ```
 #include "DashioNano33BLE.h"
 
-DashDevice dashDevice("SAMD_NINA_Type");
+DashDevice dashDevice("Nano33BLE_Type");
 DashBLE    ble_con(&dashDevice, true);
 
 int dialValue = 0;
@@ -247,7 +247,7 @@ void loop() {
 
 <ul>
 <li><strong>Design your layout</strong> in the <strong>Dash</strong> app and include all controls and connections that you need in your layout.</li>
-<li><strong>Export the layout</strong>: Tap on the <strong>Device</strong> button, then tap the <strong>Export Layout</strong> button.</li>
+<li><strong>Export the layout</strong>: Tap on the <strong>Device</strong> button, then tap the <strong>Developer / Export Layout</strong> button.</li>
 <li><strong>Select the provisioning setup</strong> that you want (see below for provisioning details) and tap the <strong>Export</strong> button. The Layout Configuration will be emailed to you.</li>
 <li><strong>Copy and paste</strong> the C64 configuration text from the email into your Arduino code, assigning it to a pointer to store the text in program memory. Your C64 configuration text will be different to that shown below.</li>
 <li><strong>Add the Layout Config Revision</strong> integer (CONFIG_REV) as a third attribute to the DashDevice object.</li>
@@ -268,7 +268,7 @@ const char configC64Str[] PROGMEM =
 DashDevice    dashDevice(DEVICE_TYPE, configC64Str, CONFIG_REV);
 ```
 
-Here is our Knob and Dial example, with TCP and MQTT connections and Layout Configuration added:
+Here is our Knob and Dial example, with the Layout Configuration added:
 
 ```
 #include "DashioNano33BLE.h"
@@ -284,7 +284,7 @@ const char configC64Str[] PROGMEM =
 "Hpg6a2C7c+pGb97ge66kElyDHAidH4x9HbVnQr0ovG5MQum8s7z2ZuwruJRnlLItX7IF01UBpQRoh3f8kWO9LH4WUmmcJmWGZ7eU"
 "YuK7mNphM5FT58Wc7dp9f1xFbAvm8fgH";
 
-DashDevice dashDevice("SAMD_NINA_Type", configC64Str, 1);
+DashDevice dashDevice("Nano33BLE_Type", configC64Str, 1);
 DashBLE    ble_con(&dashDevice, true);
 
 int dialValue = 0;

@@ -31,6 +31,13 @@ The **Dash** app is free and available for both Apple and Android devices. Use i
 
 For previous releases, please refer to <a href="https://github.com/dashio-connect/arduino-dashio">github.com/dashio-connect/arduino-dashio</a>, which is now obsolete.
 
+### 1.2.4 (31 October 2026)
+
+- When the Dash app asks for the layout and the device has none (no layout configuration, or a layout revision of 0), the device now replies "no layout" (NA) instead of sending an invalid layout.
+- Requires **Dashio** 1.2.5 or later.
+- Library properties: the architecture is now *mbed_nano* (and *mbed* for the older Mbed OS core), so the Arduino IDE no longer warns that the library may be incompatible with the Nano 33 BLE.
+- Software guide updates.
+
 ### 1.2.3 (23 January 2025)
 
 - Improve BLE incoming message processing to handle longer messages correctly.
